@@ -5,10 +5,6 @@ set -e
 # See: https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#exit-codes-and-statuses
 NEUTRAL_EXIT_CODE=78
 
-# skip if no /rebase
-echo "Checking if comment contains '/rebase' command..."
-(jq -r ".comment.body" "$GITHUB_EVENT_PATH" | grep -Fq "/rebase") || exit $NEUTRAL_EXIT_CODE
-
 # skip if not a PR
 echo "Checking if issue is a pull request..."
 (jq -r ".issue.pull_request.url" "$GITHUB_EVENT_PATH") || exit $NEUTRAL_EXIT_CODE
@@ -68,9 +64,9 @@ set -o xtrace
 git fetch origin $BASE_BRANCH
 git fetch origin $HEAD_BRANCH
 
-# do the rebase
+# do the merge
 git checkout -b $HEAD_BRANCH origin/$HEAD_BRANCH
-git rebase origin/$BASE_BRANCH
+git merge origin/$BASE_BRANCH --squash -X theirs
 
 # push back
 git push --force-with-lease
