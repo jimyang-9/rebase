@@ -9,5 +9,7 @@ LABEL "com.github.actions.description"="Automatically resolves merge conflicts w
 LABEL "com.github.actions.icon"="git-pull-request"
 LABEL "com.github.actions.color"="purple"
 
-COPY "entrypoint.sh" "/entrypoint.sh"
+RUN apk --no-cache add jq bash curl git
+
+ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
