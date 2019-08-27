@@ -63,4 +63,4 @@ git checkout -b $HEAD_BRANCH origin/$HEAD_BRANCH
 git merge origin/$BASE_BRANCH --squash -X theirs
 
 # push back
-git push --force-with-lease
+git push --force
