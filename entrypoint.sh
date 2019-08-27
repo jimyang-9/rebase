@@ -29,7 +29,9 @@ pr_resp=$(curl -X GET -s -H "${AUTH_HEADER}" -H "${API_HEADER}" \
 BASE_REPO=$(echo "$pr_resp" | jq -r .base.repo.full_name)
 BASE_BRANCH=$(echo "$pr_resp" | jq -r .base.ref)
 
-if [[ -z "$BASE_BRANCH" ]]; then
+echo "shmee response: $pr_resp"
+
+if [ -z "$BASE_BRANCH" ] || [$BASE_BRANCH = "null" ]; then
 	echo "Cannot get base branch information for PR #$PR_NUMBER!"
 	echo "API response: $pr_resp"
 	exit 1
