@@ -5,10 +5,6 @@ set -e
 # See: https://developer.github.com/actions/creating-github-actions/accessing-the-runtime-environment/#exit-codes-and-statuses
 NEUTRAL_EXIT_CODE=78
 
-# skip if no /merge
-echo "Checking if comment contains '/merge' command..."
-(jq -r ".comment.body" "$GITHUB_EVENT_PATH" | grep -Fq "/merge") || exit $NEUTRAL_EXIT_CODE
-
 # skip if not a PR
 echo "Checking if issue is a pull request..."
 (jq -r ".issue.pull_request.url" "$GITHUB_EVENT_PATH") || exit $NEUTRAL_EXIT_CODE
