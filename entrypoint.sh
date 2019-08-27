@@ -9,11 +9,6 @@ NEUTRAL_EXIT_CODE=78
 echo "Checking if issue is a pull request..."
 (jq -r ".issue.pull_request.url" "$GITHUB_EVENT_PATH") || exit $NEUTRAL_EXIT_CODE
 
-if [[ "$(jq -r ".action" "$GITHUB_EVENT_PATH")" != "created" ]]; then
-	echo "This is not a new comment event!"
-	exit $NEUTRAL_EXIT_CODE
-fi
-
 PR_NUMBER=$(jq -r ".issue.number" "$GITHUB_EVENT_PATH")
 REPO_FULLNAME=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
 echo "Collecting information about PR #$PR_NUMBER of $REPO_FULLNAME..."
