@@ -18,7 +18,6 @@ if [[ -z "$GITHUB_TOKEN" ]]; then
 	exit 1
 fi
 
-
 URI=https://api.github.com
 API_HEADER="Accept: application/vnd.github.v3+json"
 AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
@@ -31,7 +30,7 @@ BASE_BRANCH=$(echo "$pr_resp" | jq -r .base.ref)
 
 echo "shmee response: $pr_resp"
 
-if [ -z "$BASE_BRANCH" ] || ["$BASE_BRANCH" = "null" ]; then
+if [ -z "$BASE_BRANCH" ]; then
 	echo "Cannot get base branch information for PR #$PR_NUMBER!"
 	echo "API response: $pr_resp"
 	exit 1
