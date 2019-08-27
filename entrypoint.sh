@@ -6,7 +6,7 @@ set -e
 NEUTRAL_EXIT_CODE=78
 
 # skip if not a PR
-echo "Checking if issue is a pull request..."
+echo "Checking if issue is a pull request in $GITHUB_EVENT_PATH.."
 (jq -r ".pull_request.url" "$GITHUB_EVENT_PATH") || exit $NEUTRAL_EXIT_CODE
 
 PR_NUMBER=$(jq -r ".pull_request.number" "$GITHUB_EVENT_PATH")
