@@ -13,26 +13,6 @@ PR_NUMBER=$(jq -r ".issue.pull_request.number" "$GITHUB_EVENT_PATH")
 REPO_FULLNAME=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
 echo "Collecting information about PR #$PR_NUMBER of $REPO_FULLNAME..."
 
-if [[ -z "$GITHUB_TOKEN" ]]; then
-	echo "Set the GITHUB_TOKEN env variable."
-	exit 1
-fi
-
-URI=https://api.github.com
-API_HEADER="Accept: application/vnd.github.v3+json"
-AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
-
-pr_resp=$(curl -X GET -s -H "${AUTH_HEADER}" -H "${API_HEADER}" \
-          "${URI}/repos/$REPO_FULLNAME/pulls/$PR_NUMBER")
-
-BASE_REPO=$(echo "$pr_resp" | jq -r .base.repo.full_name)
-BASE_BRANCH=$(echo "$pr_resp" | jq -r .base.ref)
-
-if [[ "$(echo "$pr_resp" | jq -r .rebaseable)" != "true" ]]; then
-	echo "GitHub doesn't think that the PR is rebaseable!"
-	exit 1
-fi
-
 if [[ -z "$BASE_BRANCH" ]]; then
 	echo "Cannot get base branch information for PR #$PR_NUMBER!"
 	echo "API response: $pr_resp"
