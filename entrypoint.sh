@@ -59,7 +59,7 @@ git fetch origin $HEAD_BRANCH
 
 # do the merge
 git checkout -b $HEAD_BRANCH origin/$HEAD_BRANCH
-git merge origin/$BASE_BRANCH --squash theirs
+git merge origin/$BASE_BRANCH --strategy-option theirs
 
 # push back
 git push --force
