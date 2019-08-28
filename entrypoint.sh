@@ -6,9 +6,8 @@ set -e
 NEUTRAL_EXIT_CODE=78
 
 # skip if not a PR
-echo "Checking if issue is a pull request.."
-cat $GITHUB_EVENT_PATH
-(jq -r ".repository.pulls_url" "$GITHUB_EVENT_PATH") || exit $NEUTRAL_EXIT_CODE
+echo "Checking if issue is a pull request..."
+(jq -r ".pull_request.url" "$GITHUB_EVENT_PATH") || exit $NEUTRAL_EXIT_CODE
 
 PR_NUMBER=$(jq -r ".pull_request.number" "$GITHUB_EVENT_PATH")
 REPO_FULLNAME=$(jq -r ".repository.full_name" "$GITHUB_EVENT_PATH")
@@ -23,7 +22,8 @@ URI=https://api.github.com
 API_HEADER="Accept: application/vnd.github.v3+json"
 AUTH_HEADER="Authorization: token $GITHUB_TOKEN"
 
-pr_resp=$(jq -r ".repository.pulls_url" "$GITHUB_EVENT_PATH")
+pr_resp=$(curl -X GET -s -H "${AUTH_HEADER}" -H "${API_HEADER}" \
+          "${URI}/repos/$REPO_FULLNAME/pulls/$PR_NUMBER")
 
 BASE_REPO=$(echo "$pr_resp" | jq -r .base.repo.full_name)
 BASE_BRANCH=$(echo "$pr_resp" | jq -r .base.ref)
